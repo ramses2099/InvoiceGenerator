@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<connection>
+    <connections>
+        <connectiondb id="N4" url="jdbc:oracle:thin:@//dwpcfb-scan:1521/dpwrd.zfmc.local"
+                      user="USRTOSN4P"
+                      password="fIKfh4KDgvt$s69U#BgzbZ"/>
+        <connectiondb id="BILLING" url="jdbc:oracle:thin:@//dwpcfb-scan:1521/dpwrd.zfmc.local"
+                      user="USRTOSBIP"
+                      password="B1prdu$er"/>
+    </connections>
+</connection>
