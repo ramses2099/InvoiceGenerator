@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="90e9a1db-cd0c-488e-8708-75b126dc1550" name="Changes" comment="new commit">
+    <list default="true" id="90e9a1db-cd0c-488e-8708-75b126dc1550" name="Changes" comment="all commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/form/FrmMain.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/form/FrmMain.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/form/FrmMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/form/FrmMain.java" afterDir="false" />
@@ -30,6 +30,19 @@
       </GitPushTagMode>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="b49f499e-caff-40b2-85cd-7f966b9b4cec" />
+        <option name="url" value="https://github.com/ramses2099/InvoiceGenerator.git" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="ProjectId" id="2VhsTQgrrnIQyR5wuYnc7LdNyOA" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -171,7 +184,14 @@
       <option name="project" value="LOCAL" />
       <updated>1704306396518</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="all commit">
+      <created>1704371162114</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1704371162115</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -188,7 +208,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="commit" />
     <MESSAGE value="new commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="new commit" />
+    <MESSAGE value="all commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="all commit" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/InvoiceGenerator$Main.ic" NAME="Main Coverage Results" MODIFIED="1696269049999" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />

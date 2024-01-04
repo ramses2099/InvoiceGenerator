@@ -5,6 +5,7 @@ import com.dpworld.DBConnectionType;
 import com.dpworld.InvoiceTypeItem;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -15,10 +16,14 @@ public class FrmMain extends JFrame {
     private JButton btnGenerateEDI;
     private JButton btnSearch;
     private JComboBox cbxInvoiceType;
-    private JTable table1;
-    private JLabel lblRowCount;
+    private JTable tblView;
     private JLabel lblInvoiceType;
     private JPanel pnlSearch;
+    private JPanel pnlTable;
+    private JLabel lblRowCount;
+    private JPanel pnlRowCount;
+    private JTable table1;
+    private JScrollPane jscPnView;
 
     private DBConnection dbConnection;
 
@@ -32,10 +37,14 @@ public class FrmMain extends JFrame {
 
     private String gkeyInvoiceType;
 
-
+    // draft_nbr, String final_nbr, String status, String name, String applied
+    private final Object[] columnNames = { "Draft Nbr", "Final Nbr", "Status", "Name", "Applied" };
+    private DefaultTableModel model;
 
     public FrmMain() {
         setContentPane(pnlMain);
+        // set table view
+        createTableView();
         // fill combox invoice type
         fillComboxInvoiceType();
         // select Invoice Type
@@ -62,12 +71,9 @@ public class FrmMain extends JFrame {
         });
 
 
-
-
-
     }
 
-    //
+    // fill Combox Invoice Type
     private void fillComboxInvoiceType() {
         try {
             dbConnection = new DBConnection(DBConnectionType.BILLING);
@@ -80,6 +86,16 @@ public class FrmMain extends JFrame {
         }
 
     }
-
+    // fill table view
+    private void createTableView(){
+        Object[][] data = {
+                {"-", "-", "-","-", "-" },
+        };
+        //
+        tblView = new JTable(new DefaultTableModel(data,columnNames));
+        model = (DefaultTableModel) tblView.getModel();
+        jscPnView = new JScrollPane(tblView);
+        tblView.setFillsViewportHeight(true);
+    }
 
 }

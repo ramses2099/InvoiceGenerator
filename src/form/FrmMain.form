@@ -8,7 +8,7 @@
     <border type="none"/>
     <children>
       <grid id="54cf6" binding="pnlSearch" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="2" vgap="-1">
-        <margin top="0" left="0" bottom="0" right="0"/>
+        <margin top="5" left="3" bottom="5" right="3"/>
         <constraints border-constraint="North"/>
         <properties/>
         <border type="none" title="Search"/>
@@ -50,23 +50,36 @@
           </component>
         </children>
       </grid>
-      <grid id="1d5c1" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="3" vgap="3">
-        <margin top="0" left="0" bottom="0" right="0"/>
+      <grid id="1d5c1" binding="pnlTable" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="3" vgap="3">
+        <margin top="5" left="3" bottom="5" right="3"/>
         <constraints border-constraint="Center"/>
         <properties/>
         <border type="none"/>
         <children>
-          <component id="4f7ca" class="javax.swing.JTable" binding="table1" default-binding="true">
+          <scrollpane id="491c9">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="50"/>
-              </grid>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
-          </component>
-          <component id="a02f3" class="javax.swing.JLabel" binding="lblRowCount">
+            <border type="none"/>
+            <children>
+              <component id="c51f0" class="javax.swing.JTable" binding="table1" default-binding="true">
+                <constraints/>
+                <properties/>
+              </component>
+            </children>
+          </scrollpane>
+        </children>
+      </grid>
+      <grid id="ccb40" binding="pnlRowCount" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="5" left="3" bottom="5" right="3"/>
+        <constraints border-constraint="South"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="c683e" class="javax.swing.JLabel" binding="lblRowCount">
             <constraints>
-              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font style="1"/>
