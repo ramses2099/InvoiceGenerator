@@ -2,6 +2,7 @@ package form;
 
 import com.dpworld.DBConnection;
 import com.dpworld.DBConnectionType;
+import com.dpworld.InvoiceDetails;
 import com.dpworld.InvoiceTypeItem;
 
 import javax.swing.*;
@@ -9,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Vector;
 
 public class FrmMain extends JFrame {
 
@@ -16,13 +18,12 @@ public class FrmMain extends JFrame {
     private JButton btnGenerateEDI;
     private JButton btnSearch;
     private JComboBox cbxInvoiceType;
-    private JTable tblView;
     private JLabel lblInvoiceType;
     private JPanel pnlSearch;
     private JPanel pnlTable;
     private JLabel lblRowCount;
     private JPanel pnlRowCount;
-    private JTable table1;
+    private JTable tblView;
     private JScrollPane jscPnView;
 
     private DBConnection dbConnection;
@@ -38,11 +39,13 @@ public class FrmMain extends JFrame {
     private String gkeyInvoiceType;
 
     // draft_nbr, String final_nbr, String status, String name, String applied
-    private final Object[] columnNames = { "Draft Nbr", "Final Nbr", "Status", "Name", "Applied" };
+    private final Object[] columnNames = { "Draft Nbr", "Final Nbr", "Status", "Peyee", "Finalized Date","Applied" };
     private DefaultTableModel model;
 
     public FrmMain() {
         setContentPane(pnlMain);
+        //set label
+        lblRowCount.setText("Count Rows 0 : ");
         // set table view
         createTableView();
         // fill combox invoice type
@@ -58,13 +61,14 @@ public class FrmMain extends JFrame {
         btnSearch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String sfilter = getGkeyInvoiceType();
-                if(sfilter == null){
+                String invtype = getGkeyInvoiceType();
+                if(invtype == null){
                     JOptionPane.showMessageDialog(null,"For filter is required selected",
                             "Invoice Type",JOptionPane.ERROR_MESSAGE);
                 }else{
                     // fill table
-                    System.out.println("No");
+                    System.out.println("inv key :" + invtype);
+                    loadDataTableView(invtype);
                 }
 
             }
@@ -89,13 +93,45 @@ public class FrmMain extends JFrame {
     // fill table view
     private void createTableView(){
         Object[][] data = {
-                {"-", "-", "-","-", "-" },
+                {"", "", "","", "" ,""},
         };
         //
-        tblView = new JTable(new DefaultTableModel(data,columnNames));
+        tblView.setModel(new DefaultTableModel(null,columnNames));
         model = (DefaultTableModel) tblView.getModel();
-        jscPnView = new JScrollPane(tblView);
         tblView.setFillsViewportHeight(true);
+    }
+    // load data
+    private void loadDataTableView(String invtype){
+        try{
+            // clear
+            tblView.setModel(new DefaultTableModel(null,columnNames));
+            model = (DefaultTableModel) tblView.getModel();
+
+            dbConnection = new DBConnection(DBConnectionType.BILLING);
+            List<InvoiceDetails> data = dbConnection.getInvoiceDetails(invtype);
+
+            if (data.size() > 0) {
+                for (int i = 0; i < data.size(); i++) {
+                    InvoiceDetails item = data.get(i);
+                    Vector<Object> cell = new Vector<Object>();
+
+                    cell.addElement(item.get_draft_nbr());
+                    cell.addElement(item.get_final_nbr());
+                    cell.addElement(item.get_status());
+                    cell.addElement(item.get_name());
+                    cell.addElement(item.get_finalized_date());
+                    cell.addElement(item.get_applied());
+
+                    model.addRow(cell);
+                }
+                //
+                lblRowCount.setText("Count Rows : " + data.size());
+
+            }
+        }catch (Exception ex){
+            System.out.println("Method loadDataTableView " + ex.getMessage());
+        }
+
     }
 
 }

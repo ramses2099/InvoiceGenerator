@@ -63,7 +63,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="c51f0" class="javax.swing.JTable" binding="table1" default-binding="true">
+              <component id="c51f0" class="javax.swing.JTable" binding="tblView">
                 <constraints/>
                 <properties/>
               </component>
@@ -83,7 +83,7 @@
             </constraints>
             <properties>
               <font style="1"/>
-              <text value="Count Rows 0"/>
+              <text value=""/>
             </properties>
           </component>
         </children>

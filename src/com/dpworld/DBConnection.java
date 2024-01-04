@@ -63,7 +63,7 @@ public class DBConnection {
                     "INNER JOIN bil_invoice_type bit ON bit.gkey = i.invtype_gkey\n" +
                     "WHERE i.status  ='FINAL' AND i.payee_customer_gkey in(10611, 10624)\n" +
                     "AND EXTRACT(YEAR FROM i.finalized_date) = EXTRACT(YEAR FROM SYSDATE)\n" +
-                    "AND EXTRACT(MONTH FROM i.finalized_date) >= 11\n" +
+                    "-- AND EXTRACT(MONTH FROM i.finalized_date) >= 11\n" +
                     "-- AND EXTRACT(MONTH FROM i.finalized_date) = EXTRACT(MONTH FROM SYSDATE)\n" +
                     "-- AND (i.flex_date05 IS NULL OR i.flex_date05 = NULL) \n"+
                     "AND  i.invtype_gkey = ?");
@@ -77,7 +77,8 @@ public class DBConnection {
                 String status = result.getString("status");
                 String Payee = result.getString("Payee");
                 String applied = result.getString("applied");
-                list.add(new InvoiceDetails(draft_nbr, final_nbr, status, Payee,applied));
+                String finalized_date = result.getString("finalized_date");
+                list.add(new InvoiceDetails(draft_nbr, final_nbr, status, Payee,finalized_date,applied));
             }
 
             con.close();

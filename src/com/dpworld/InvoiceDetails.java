@@ -7,15 +7,25 @@ public class InvoiceDetails {
     private String _status;
     private String _name;
     private String _applied;
+    private String _finalized_date;
 
     public InvoiceDetails(){}
 
-    public InvoiceDetails(String draft_nbr, String final_nbr, String status, String name, String applied){
+    public InvoiceDetails(String draft_nbr, String final_nbr, String status, String name, String finalized_date, String applied){
         this._draft_nbr = draft_nbr;
         this._final_nbr = final_nbr;
         this._status = status;
         this._name = name;
         this._applied = applied;
+        this._finalized_date = finalized_date;
+    }
+
+    public String get_finalized_date() {
+        return _finalized_date;
+    }
+
+    public void set_finalized_date(String _finalized_date) {
+        this._finalized_date = _finalized_date;
     }
 
     public String get_draft_nbr() {
