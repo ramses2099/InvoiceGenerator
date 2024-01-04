@@ -67,10 +67,16 @@ public class FrmMain extends JFrame {
                             "Invoice Type",JOptionPane.ERROR_MESSAGE);
                 }else{
                     // fill table
-                    System.out.println("inv key :" + invtype);
                     loadDataTableView(invtype);
                 }
 
+            }
+        });
+        // generate
+        btnGenerateEDI.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("ok");
             }
         });
 
