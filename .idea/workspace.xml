@@ -6,9 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="90e9a1db-cd0c-488e-8708-75b126dc1550" name="Changes" comment="new commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InvoiceGenerator.iml" beforeDir="false" afterPath="$PROJECT_DIR$/InvoiceGenerator.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/dpworld/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/dpworld/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/form/FrmMain.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/form/FrmMain.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/form/FrmMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/form/FrmMain.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,6 +45,9 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "UI_DESIGNER_EDITOR_MODE.PaletteManager.SHOW": "true",
+    "UI_DESIGNER_EDITOR_MODE.PaletteManager.WIDTH": "179",
+    "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH": "276",
     "jdk.selected.JAVA_MODULE": "openjdk-19",
     "last_opened_file_path": "C:/Users/D5404/IdeaProjects/InvoiceGenerator/libs",
     "project.structure.last.edited": "Libraries",
@@ -162,7 +164,14 @@
       <option name="project" value="LOCAL" />
       <updated>1704303861347</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="new commit">
+      <created>1704306396518</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1704306396518</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
