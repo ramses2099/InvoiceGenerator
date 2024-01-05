@@ -1,14 +1,16 @@
 package form;
 
-import com.dpworld.DBConnection;
-import com.dpworld.DBConnectionType;
-import com.dpworld.InvoiceDetails;
-import com.dpworld.InvoiceTypeItem;
+import com.dpworld.*;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Vector;
 
@@ -26,6 +28,8 @@ public class FrmMain extends JFrame {
     private JTable tblView;
     private JScrollPane jscPnView;
 
+    private String _nbrfinal;
+
     private DBConnection dbConnection;
 
     public String getGkeyInvoiceType() {
@@ -39,8 +43,16 @@ public class FrmMain extends JFrame {
     private String gkeyInvoiceType;
 
     // draft_nbr, String final_nbr, String status, String name, String applied
-    private final Object[] columnNames = { "Draft Nbr", "Final Nbr", "Status", "Peyee", "Finalized Date","Applied" };
+    private final Object[] columnNames = {"Draft Nbr", "Final Nbr", "Status", "Peyee", "Finalized Date", "Applied"};
     private DefaultTableModel model;
+
+    private String get_nbrfinal(){
+        return _nbrfinal;
+    }
+
+    private void set_nbrfinal(String value){
+        _nbrfinal = value;
+    }
 
     public FrmMain() {
         setContentPane(pnlMain);
@@ -62,10 +74,10 @@ public class FrmMain extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String invtype = getGkeyInvoiceType();
-                if(invtype == null){
-                    JOptionPane.showMessageDialog(null,"For filter is required selected",
-                            "Invoice Type",JOptionPane.ERROR_MESSAGE);
-                }else{
+                if (invtype == null) {
+                    JOptionPane.showMessageDialog(null, "For filter is required selected",
+                            "Invoice Generator", JOptionPane.ERROR_MESSAGE);
+                } else {
                     // fill table
                     loadDataTableView(invtype);
                 }
@@ -76,7 +88,37 @@ public class FrmMain extends JFrame {
         btnGenerateEDI.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("ok");
+                String nbrfinal = get_nbrfinal();
+                if (nbrfinal == null) {
+                    JOptionPane.showMessageDialog(null, "For genearte EDI is required selected an invoice",
+                            "Invoive Generator", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    //---------------------------------------------//
+                    //------------Generate EDI Invoice------------//
+                    GenerateEDI generateEDI = new GenerateEDI();
+                    try{
+                        //-----------------------------------------//
+                        //-------Step 1---------------------------//
+                        generateEDI.createEDI(nbrfinal);
+
+
+
+
+                        //---------------------------------------//
+                        JOptionPane.showMessageDialog(null, "Invoice generated correctly",
+                                "Invoive Generator", JOptionPane.INFORMATION_MESSAGE);
+                    }catch (Exception ex){
+                        System.out.println("Method btnGenerateEDI " + ex.getMessage());
+                    }
+                }
+            }
+        });
+
+        // table select value
+        tblView.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                set_nbrfinal(tblView.getValueAt(tblView.getSelectedRow(), 1).toString());
             }
         });
 
@@ -96,21 +138,23 @@ public class FrmMain extends JFrame {
         }
 
     }
+
     // fill table view
-    private void createTableView(){
+    private void createTableView() {
         Object[][] data = {
-                {"", "", "","", "" ,""},
+                {"", "", "", "", "", ""},
         };
         //
-        tblView.setModel(new DefaultTableModel(null,columnNames));
+        tblView.setModel(new DefaultTableModel(null, columnNames));
         model = (DefaultTableModel) tblView.getModel();
         tblView.setFillsViewportHeight(true);
     }
+
     // load data
-    private void loadDataTableView(String invtype){
-        try{
+    private void loadDataTableView(String invtype) {
+        try {
             // clear
-            tblView.setModel(new DefaultTableModel(null,columnNames));
+            tblView.setModel(new DefaultTableModel(null, columnNames));
             model = (DefaultTableModel) tblView.getModel();
 
             dbConnection = new DBConnection(DBConnectionType.BILLING);
@@ -134,7 +178,7 @@ public class FrmMain extends JFrame {
                 lblRowCount.setText("Count Rows : " + data.size());
 
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("Method loadDataTableView " + ex.getMessage());
         }
 

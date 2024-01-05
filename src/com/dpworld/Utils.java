@@ -5,6 +5,8 @@ import javassist.Loader;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Utils {
 
@@ -43,6 +45,35 @@ public class Utils {
         return ClassLoader.getSystemResource(resource);
     }
 
+    public static String getControlNumber(){
+        String rs = "";
+        Date today = new Date();
+        SimpleDateFormat dateFormat = null;
+        try {
+            dateFormat = new SimpleDateFormat("yyMMdd");
+            String yyMMdd = dateFormat.format(today);
+            dateFormat = new SimpleDateFormat("mmssSS");
+            String HHmmssSS = dateFormat.format(today);
+            rs = String.format("%s%s",yyMMdd,HHmmssSS);
+        }catch (Exception ex){
+            System.out.println("Method getControlNumber " + ex.getMessage());
+        }
+
+        return rs;
+    }
+
+    public static String getFilename(Invoice invoice) {
+        String rs ="";
+        Long draftNbr = invoice.get_draft_nbr();
+        String lineOper = invoice.get_payeeid();
+        String vesselVoyage = invoice.get_vessel_visit_id();
+        if (vesselVoyage != null && vesselVoyage.length() > 4) {
+            vesselVoyage = vesselVoyage.substring(vesselVoyage.length() - 4);
+        }
+        rs = String.format("%s%s%s",lineOper,vesselVoyage,draftNbr);
+
+        return rs;
+    }
 
 
 }
