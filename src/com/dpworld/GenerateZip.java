@@ -23,7 +23,7 @@ public class GenerateZip {
 
         try {
             final FileOutputStream fos = new FileOutputStream(zipFileName);
-            ZipOutputStream zipOut = new ZipOutputStream(fos));
+            ZipOutputStream zipOut = new ZipOutputStream(fos);
             if (zipOut != null) {
                 for (String srcFile : srcFiles) {
                     File fileToZip = new File(srcFile);
