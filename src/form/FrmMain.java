@@ -97,6 +97,7 @@ public class FrmMain extends JFrame {
                     //------------Generate EDI Invoice------------//
                     GenerateEDI generateEDI = new GenerateEDI();
                     GeneratePDF generatePDF = new GeneratePDF();
+                    GenerateZip generateZip = new GenerateZip();
 
 
                     try{
@@ -109,7 +110,8 @@ public class FrmMain extends JFrame {
                         }
                         //-------------------------------------------------------------------//
                         //------------------FILE NAME----------------------------------------//
-                        String fileName = String.format("%s.edi", Utils.getFilename(invoice));
+                        //String fileName = String.format("%s.edi", Utils.getFilename(invoice));
+                        String fileName = Utils.getFilename(invoice);
                         //---------------------------------------------//
 
                         //-----------------------------------------//
@@ -120,7 +122,7 @@ public class FrmMain extends JFrame {
                         generatePDF.generatePdf(invoice.get_draft_nbr(),fileName);
                         //-----------------------------------------//
                         //-------Step 3---------------------------//
-
+                        generateZip.generateZip(fileName);
 
                         //---------------------------------------//
                         JOptionPane.showMessageDialog(null, "Invoice generated correctly",

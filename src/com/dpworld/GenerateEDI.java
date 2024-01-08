@@ -17,8 +17,7 @@ public class GenerateEDI {
         DBConnection dbConnection = null;
         Translation translation = null;
         try {
-
-            String path = String.format("\\\\192.168.6.29\\edi\\PRODUCTION\\OUT\\INVOICE\\MSC\\InvoiceGenerator\\%s", fileName);
+            String path = String.format("\\\\192.168.6.29\\edi\\PRODUCTION\\OUT\\INVOICE\\MSC\\InvoiceGenerator\\%s.edi", fileName);
 
             File file = new File(path);
             if (!file.exists()) {
