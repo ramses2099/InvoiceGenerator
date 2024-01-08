@@ -51,39 +51,50 @@ public class GenerateEDI {
 
             String UNB = String.format("UNB+UNOA:3+DPWCAU:ZZ+MSCU:ZZ+%s:%s+%s'\n", yymmdd, hhmm, controlNumber);
             bw.write(UNB);
+            segmentCount += 1;
             //-------------------------------------------//
             // --------Segment UNH----------------------//
             String numberRef = String.format("0020%s%s", yymmdd, hhmm);
             String UNH = String.format("UNH+%s+INVOIC:D:96A:UN:EAN008'\n", numberRef);
             bw.write(UNH);
+            segmentCount += 1;
             //-------------------------------------------//
             // --------Segment BGM----------------------//
             String BGM = String.format("BGM+380+6422%S+9'\n", invoice.get_final_nbr());
             bw.write(BGM);
+            segmentCount += 1;
             //-------------------------------------------//
             // --------Segment DTM+137----------------------//
             String DTM_137 = String.format("DTM+137:%s:102'\n", Utils.getDateString(today, "yyyyMMdd"));
             bw.write(DTM_137);
+            segmentCount += 1;
             //-------------------------------------------//
             // --------Segment RFF+CR--------------------//
             String RFF_CR = String.format("RFF+CR:%s'\n", invoice.get_customer_references());
             bw.write(RFF_CR);
+            segmentCount += 1;
             //-------------------------------------------//
             // --------Segment RFF+IV--------------------//
             String RFF_IV = String.format("RFF+IV:6422%s'\n", invoice.get_final_nbr());
             bw.write(RFF_IV);
+            segmentCount += 1;
             //-------------------------------------------//
             // --------Segment--------------------------//
             String NAD_IV = "NAD+IV+MSCR+CHEMIN RIEU, 12-14:1208+++GENEVA+++CH'\n";
             bw.write(NAD_IV);
+            segmentCount += 1;
             String NAD_BY = "NAD+BY+8200+MEDITERRANEAN SHIPPING COMPANY (R)'\n";
             bw.write(NAD_BY);
+            segmentCount += 1;
             String NAD_SU = "NAD+SU+1000143468::9++DPW CAUCEDO+201 MISSION ST+SAN FRANCISCO+CA+94105+US'\n";
             bw.write(NAD_SU);
+            segmentCount += 1;
             String RFF_VA = "RFF+VA:GB0448826918'\n";
             bw.write(RFF_VA);
+            segmentCount += 1;
             String CUX = "CUX+2:USD:4++1.1'\n";
             bw.write(CUX);
+            segmentCount += 1;
 
             //-------------------------------------------//
             //---------DETAILS--------------------------//
@@ -163,7 +174,6 @@ public class GenerateEDI {
                         String MOA = "MOA+124:0.0'\n";
                         bw.write(MOA);
 
-
                         countLin++;
                         segmentCount += 14;
                         moaTotal += item.get_amount();
@@ -176,22 +186,27 @@ public class GenerateEDI {
             // --------Segment UNS------------------//
             String UNS = "UNS+S'\n";
             bw.write(UNS);
+            segmentCount += 1;
             //---------------------------------------//
             // --------Segment CNT_1----------------//
             String CNT_1 = String.format("CNT+1:%s'\n", countLin);
             bw.write(CNT_1);
+            segmentCount += 1;
             //---------------------------------------//
             // --------Segment CNT_1----------------//
             String CNT_2 = String.format("CNT+2:%s'\n", countLin);
             bw.write(CNT_2);
+            segmentCount += 1;
             //---------------------------------------//
             // --------Segment MOA----------------//
             String MOA = String.format(" MOA+124:%s'\n", moaTotal);
             bw.write(MOA);
+            segmentCount += 1;
             //---------------------------------------//
             // --------Segment TAX----------------//
             String TAX = "TAX+7+VAT:::0.0'\n";
             bw.write(TAX);
+            segmentCount += 1;
             //---------------------------------------//
             // --------Segment UNT----------------//
             String UNT = String.format("UNT+%s+%s'\n",segmentCount,numberRef);
