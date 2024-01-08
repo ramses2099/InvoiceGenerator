@@ -13,20 +13,11 @@ public class GenerateEDI {
 
     }
 
-    public void createEDI(String nbrFinal) {
+    public void createEDI(Invoice invoice, String fileName) {
         DBConnection dbConnection = null;
         Translation translation = null;
         try {
-            //---------------------------------------------------------------------//
-            //---------------------GET DATA---------------------------------------//
-            dbConnection = new DBConnection(DBConnectionType.BILLING);
-            Invoice invoice = dbConnection.getInvoiceByFinalNumber(nbrFinal);
-            if (invoice == null) {
-                throw new Exception("Invoice is null");
-            }
-            //-------------------------------------------------------------------//
-            //------------------FILE NAME----------------------------------------//
-            String fileName = String.format("%s.edi", Utils.getFilename(invoice));
+
             String path = String.format("\\\\192.168.6.29\\edi\\PRODUCTION\\OUT\\INVOICE\\MSC\\InvoiceGenerator\\%s", fileName);
 
             File file = new File(path);
@@ -101,7 +92,7 @@ public class GenerateEDI {
             //---------COUNT SEGMENT - 14--------------//
             Integer countLin = 1;
             dbConnection = new DBConnection(DBConnectionType.BILLING);
-            List<InvoiceItem> invoiceItems = dbConnection.getInvoiceItmesByFinalNumber(nbrFinal);
+            List<InvoiceItem> invoiceItems = dbConnection.getInvoiceItmesByFinalNumber(invoice.get_final_nbr());
             if (invoiceItems == null) {
                 throw new Exception("Invoice Items are null");
             }
@@ -111,7 +102,7 @@ public class GenerateEDI {
                     if (item.get_amount() > 0) {
                         //-------------------------------------------//
                         // --------Segment LIN----------------------//
-                        String LIN = String.format("LIN+%s++:EN'", countLin);
+                        String LIN = String.format("LIN+%s++:EN'\n", countLin);
                         bw.write(LIN);
                         //-------------------------------------------//
                         // --------Segment IMD----------------------//
@@ -149,7 +140,7 @@ public class GenerateEDI {
                         bw.write(PRI);
                         //-------------------------------------------//
                         //--------Segment RFF+BM-----------------------//
-                        String RFF_BM = String.format("RFF+BM:%s\n'", "MEDUQM026868A");
+                        String RFF_BM = String.format("RFF+BM:%s'\n", "MEDUQM026868A");
                         bw.write(RFF_BM);
                         //-------------------------------------------//
                         //--------Segment RFF+VON--------------------//
@@ -157,7 +148,7 @@ public class GenerateEDI {
                         bw.write(RFF_VON);
                         //-------------------------------------------//
                         //--------Segment DTM_7----------------------//
-                        String DTM_7 = String.format(" DTM+7:%s:102'\n", Utils.getDateString(today, "yyyyMMdd"));
+                        String DTM_7 = String.format("DTM+7:%s:102'\n", Utils.getDateString(today, "yyyyMMdd"));
                         bw.write(DTM_7);
                         //-------------------------------------------//
                         //--------Segment LOC_1----------------------//
@@ -167,7 +158,7 @@ public class GenerateEDI {
                         bw.write(LOC_1);
                         //-------------------------------------------//
                         //--------Segment TAX----------------------//
-                        String TAX = " TAX+7+VAT+++:::0+S'\n";
+                        String TAX = "TAX+7+VAT+++:::0+S'\n";
                         bw.write(TAX);
                         //-------------------------------------------//
                         //--------Segment MOA----------------------//
@@ -189,17 +180,17 @@ public class GenerateEDI {
             segmentCount += 1;
             //---------------------------------------//
             // --------Segment CNT_1----------------//
-            String CNT_1 = String.format("CNT+1:%s'\n", countLin);
+            String CNT_1 = String.format("CNT+1:%s'\n", (countLin - 1));
             bw.write(CNT_1);
             segmentCount += 1;
             //---------------------------------------//
             // --------Segment CNT_1----------------//
-            String CNT_2 = String.format("CNT+2:%s'\n", countLin);
+            String CNT_2 = String.format("CNT+2:%s'\n", (countLin - 1));
             bw.write(CNT_2);
             segmentCount += 1;
             //---------------------------------------//
             // --------Segment MOA----------------//
-            String MOA = String.format(" MOA+124:%s'\n", moaTotal);
+            String MOA = String.format("MOA+124:%.2f'\n", moaTotal);
             bw.write(MOA);
             segmentCount += 1;
             //---------------------------------------//
@@ -209,11 +200,11 @@ public class GenerateEDI {
             segmentCount += 1;
             //---------------------------------------//
             // --------Segment UNT----------------//
-            String UNT = String.format("UNT+%s+%s'\n",segmentCount,numberRef);
+            String UNT = String.format("UNT+%s+%s'\n", segmentCount, numberRef);
             bw.write(UNT);
             //---------------------------------------//
             // --------Segment UNZ----------------//
-            String UNZ = String.format("UNZ+1+%s'\n",controlNumber);
+            String UNZ = String.format("UNZ+1+%s'\n", controlNumber);
             bw.write(UNZ);
 
             bw.close();

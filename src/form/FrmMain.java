@@ -93,15 +93,33 @@ public class FrmMain extends JFrame {
                     JOptionPane.showMessageDialog(null, "For genearte EDI is required selected an invoice",
                             "Invoive Generator", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    //---------------------------------------------//
+
                     //------------Generate EDI Invoice------------//
                     GenerateEDI generateEDI = new GenerateEDI();
+                    GeneratePDF generatePDF = new GeneratePDF();
+
+
                     try{
+                        //---------------------------------------------------------------------//
+                        //---------------------GET DATA---------------------------------------//
+                        dbConnection = new DBConnection(DBConnectionType.BILLING);
+                        Invoice invoice = dbConnection.getInvoiceByFinalNumber(nbrfinal);
+                        if (invoice == null) {
+                            throw new Exception("Invoice is null");
+                        }
+                        //-------------------------------------------------------------------//
+                        //------------------FILE NAME----------------------------------------//
+                        String fileName = String.format("%s.edi", Utils.getFilename(invoice));
+                        //---------------------------------------------//
+
                         //-----------------------------------------//
                         //-------Step 1---------------------------//
-                        generateEDI.createEDI(nbrfinal);
-
-
+                        generateEDI.createEDI(invoice, fileName);
+                        //-----------------------------------------//
+                        //-------Step 2---------------------------//
+                        generatePDF.generatePdf(invoice.get_draft_nbr(),fileName);
+                        //-----------------------------------------//
+                        //-------Step 3---------------------------//
 
 
                         //---------------------------------------//
