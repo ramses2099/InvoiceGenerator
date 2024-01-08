@@ -42,15 +42,19 @@ public class GenerateEDI {
 
             //-------------------------------------------//
             // --------Segment UNB----------------------//
+            Integer segmentCount = 0;
+            Double moaTotal = 0.0;
             Date today = new Date();
             String yymmdd = Utils.getDateString(today, "yyMMdd");
             String hhmm = Utils.getDateString(today, "HHmm");
             String controlNumber = Utils.getControlNumber();
+
             String UNB = String.format("UNB+UNOA:3+DPWCAU:ZZ+MSCU:ZZ+%s:%s+%s'\n", yymmdd, hhmm, controlNumber);
             bw.write(UNB);
             //-------------------------------------------//
             // --------Segment UNH----------------------//
-            String UNH = "UNH+002009350051+INVOIC:D:96A:UN:EAN008'\n";
+            String numberRef = String.format("0020%s%s", yymmdd, hhmm);
+            String UNH = String.format("UNH+%s+INVOIC:D:96A:UN:EAN008'\n", numberRef);
             bw.write(UNH);
             //-------------------------------------------//
             // --------Segment BGM----------------------//
@@ -84,19 +88,19 @@ public class GenerateEDI {
             //-------------------------------------------//
             //---------DETAILS--------------------------//
             //---------COUNT SEGMENT - 14--------------//
-            Integer CountLin = 1;
+            Integer countLin = 1;
             dbConnection = new DBConnection(DBConnectionType.BILLING);
             List<InvoiceItem> invoiceItems = dbConnection.getInvoiceItmesByFinalNumber(nbrFinal);
             if (invoiceItems == null) {
                 throw new Exception("Invoice Items are null");
             }
-            //---------------------------------------//
+            //-------DETAILS INVOICE---------------------//
             if (invoiceItems.size() > 0) {
                 for (InvoiceItem item : invoiceItems) {
                     if (item.get_amount() > 0) {
                         //-------------------------------------------//
                         // --------Segment LIN----------------------//
-                        String LIN = String.format("LIN+%s++:EN'", CountLin);
+                        String LIN = String.format("LIN+%s++:EN'", countLin);
                         bw.write(LIN);
                         //-------------------------------------------//
                         // --------Segment IMD----------------------//
@@ -124,29 +128,78 @@ public class GenerateEDI {
                         //--------Segment DTM_318-------------------//
                         String DTM_318 = String.format("DTM+318:%s:102'\n", Utils.getDateString(today, "yyyyMMdd"));
                         bw.write(DTM_318);
+                        //-------------------------------------------//
+                        //--------Segment EQD-----------------------//
+                        String EQD = String.format("EQD+CN+%s+18'\n", item.get_event_id());
+                        bw.write(EQD);
+                        //-------------------------------------------//
+                        //--------Segment PRI-----------------------//
+                        String PRI = String.format("PRI+AAA:%s'\n", item.get_amount());
+                        bw.write(PRI);
+                        //-------------------------------------------//
+                        //--------Segment RFF+BM-----------------------//
+                        String RFF_BM = String.format("RFF+BM:%s\n'", "MEDUQM026868A");
+                        bw.write(RFF_BM);
+                        //-------------------------------------------//
+                        //--------Segment RFF+VON--------------------//
+                        String RFF_VON = String.format("RFF+VON:%s'\n", invoice.get_vessel_visit_id());
+                        bw.write(RFF_VON);
+                        //-------------------------------------------//
+                        //--------Segment DTM_7----------------------//
+                        String DTM_7 = String.format(" DTM+7:%s:102'\n", Utils.getDateString(today, "yyyyMMdd"));
+                        bw.write(DTM_7);
+                        //-------------------------------------------//
+                        //--------Segment LOC_1----------------------//
+                        String vesselClass = "";
+                        String vesselName = "";
+                        String LOC_1 = String.format("LOC+1+DOCAU:139:6+%s:146:11:%s+DOCAUDW:ZZZ:6'\n", vesselClass, vesselName);
+                        bw.write(LOC_1);
+                        //-------------------------------------------//
+                        //--------Segment TAX----------------------//
+                        String TAX = " TAX+7+VAT+++:::0+S'\n";
+                        bw.write(TAX);
+                        //-------------------------------------------//
+                        //--------Segment MOA----------------------//
+                        String MOA = "MOA+124:0.0'\n";
+                        bw.write(MOA);
 
-                        CountLin++;
+
+                        countLin++;
+                        segmentCount += 14;
+                        moaTotal += item.get_amount();
+
                     }
                 }
-
-            /*---
-            LIN+1++:EN'
-            IMD+F++ECR000381:::ISPS FULL TRANSHIPMENT:ISPS FULL TRANSHIPMENT'
-            QTY+47:1.0:CH'
-            DTM+194:20231122:102'
-            DTM+206:20231122:102'
-            DTM+318:20231122:102'
-            EQD+CN+MEDU7330408+18'
-            PRI+AAA:2.38'
-            RFF+BM:MEDUQM026868A'
-            RFF+VON:ASLPD345A'
-            DTM+7:20230116:102'
-            LOC+1+DOCAU:139:6+9314947:146:11:AS CAMELLIA+DOCAUDW:ZZZ:6'
-            TAX+7+VAT+++:::0+S'
-            MOA+124:0.0'
-            --*/
             }
-
+            //---------------------------------------//
+            //---------------------------------------//
+            // --------Segment UNS------------------//
+            String UNS = "UNS+S'\n";
+            bw.write(UNS);
+            //---------------------------------------//
+            // --------Segment CNT_1----------------//
+            String CNT_1 = String.format("CNT+1:%s'\n", countLin);
+            bw.write(CNT_1);
+            //---------------------------------------//
+            // --------Segment CNT_1----------------//
+            String CNT_2 = String.format("CNT+2:%s'\n", countLin);
+            bw.write(CNT_2);
+            //---------------------------------------//
+            // --------Segment MOA----------------//
+            String MOA = String.format(" MOA+124:%s'\n", moaTotal);
+            bw.write(MOA);
+            //---------------------------------------//
+            // --------Segment TAX----------------//
+            String TAX = "TAX+7+VAT:::0.0'\n";
+            bw.write(TAX);
+            //---------------------------------------//
+            // --------Segment UNT----------------//
+            String UNT = String.format("UNT+%s+%s'\n",segmentCount,numberRef);
+            bw.write(UNT);
+            //---------------------------------------//
+            // --------Segment UNZ----------------//
+            String UNZ = String.format("UNZ+1+%s'\n",controlNumber);
+            bw.write(UNZ);
 
             bw.close();
 
