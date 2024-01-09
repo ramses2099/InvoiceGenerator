@@ -119,35 +119,35 @@ public class GenerateEDI {
                         bw.write(QTY);
                         //-------------------------------------------//
                         //--------Segment DTM_194-------------------//
-                        String DTM_194 = String.format("DTM+194:%s:102'\n", Utils.getDateString(today, "yyyyMMdd"));
+                        String DTM_194 = String.format("DTM+194:%s:102'\n", Utils.getDateString(invoice.get_finalized_date(), "yyyyMMdd"));
                         bw.write(DTM_194);
                         //-------------------------------------------//
                         //--------Segment DTM_206-------------------//
-                        String DTM_206 = String.format("DTM+206:%s:102'\n", Utils.getDateString(today, "yyyyMMdd"));
+                        String DTM_206 = String.format("DTM+206:%s:102'\n", Utils.getDateString(invoice.get_finalized_date(), "yyyyMMdd"));
                         bw.write(DTM_206);
                         //-------------------------------------------//
                         //--------Segment DTM_318-------------------//
-                        String DTM_318 = String.format("DTM+318:%s:102'\n", Utils.getDateString(today, "yyyyMMdd"));
+                        String DTM_318 = String.format("DTM+318:%s:102'\n", Utils.getDateString(invoice.get_finalized_date(), "yyyyMMdd"));
                         bw.write(DTM_318);
                         //-------------------------------------------//
                         //--------Segment EQD-----------------------//
-                        String EQD = String.format("EQD+CN+%s+18'\n", item.get_event_id());
-                        bw.write(EQD);
+                        //- String EQD = String.format("EQD+CN+%s+18'\n", item.get_event_id());
+                        //- bw.write(EQD);
                         //-------------------------------------------//
                         //--------Segment PRI-----------------------//
                         String PRI = String.format("PRI+AAA:%s'\n", item.get_amount());
                         bw.write(PRI);
                         //-------------------------------------------//
                         //--------Segment RFF+BM-----------------------//
-                        String RFF_BM = String.format("RFF+BM:%s'\n", "MEDUQM026868A");
-                        bw.write(RFF_BM);
+                        //- String RFF_BM = String.format("RFF+BM:%s'\n", "MEDUQM026868A");
+                        //- bw.write(RFF_BM);
                         //-------------------------------------------//
                         //--------Segment RFF+VON--------------------//
                         String RFF_VON = String.format("RFF+VON:%s'\n", invoice.get_vessel_visit_id());
                         bw.write(RFF_VON);
                         //-------------------------------------------//
                         //--------Segment DTM_7----------------------//
-                        String DTM_7 = String.format("DTM+7:%s:102'\n", Utils.getDateString(today, "yyyyMMdd"));
+                        String DTM_7 = String.format("DTM+7:%s:102'\n", Utils.getDateString(invoice.get_finalized_date(), "yyyyMMdd"));
                         bw.write(DTM_7);
                         //-------------------------------------------//
                         //--------Segment LOC_1----------------------//

@@ -1,5 +1,7 @@
 package com.dpworld;
 
+import java.util.Date;
+
 public class Invoice {
     private Long _gkey;
     private Long _draft_nbr;
@@ -9,10 +11,14 @@ public class Invoice {
     private String _payee;
     private String _vessel_visit_id;
     private String _customer_references;
-    public Invoice(){}
 
-    public Invoice(Long gkey, Long _draft_nbr, String final_nbr, String status,String payeeid,  String payee, String vessel_visit_id,
-                   String customer_references){
+    private Date _finalized_date;
+
+    public Invoice() {
+    }
+
+    public Invoice(Long gkey, Long _draft_nbr, String final_nbr, String status, String payeeid, String payee, String vessel_visit_id,
+                   String customer_references,Date finalized_date) {
         this._gkey = gkey;
         this._draft_nbr = _draft_nbr;
         this._final_nbr = final_nbr;
@@ -20,7 +26,8 @@ public class Invoice {
         this._payeeid = payeeid;
         this._payee = payee;
         this._vessel_visit_id = vessel_visit_id;
-        this._customer_references =customer_references;
+        this._customer_references = customer_references;
+        this._finalized_date = finalized_date;
     }
 
     public Long get_draft_nbr() {
@@ -70,9 +77,11 @@ public class Invoice {
     public void set_customer_references(String _customer_references) {
         this._customer_references = _customer_references;
     }
+
     public Long get_gkey() {
         return _gkey;
     }
+
     public void set_gkey(Long _gkey) {
         this._gkey = _gkey;
     }
@@ -83,5 +92,13 @@ public class Invoice {
 
     public void set_payeeid(String _payeeid) {
         this._payeeid = _payeeid;
+    }
+
+    public Date get_finalized_date() {
+        return _finalized_date;
+    }
+
+    public void set_finalized_date(Date _finalized_date) {
+        this._finalized_date = _finalized_date;
     }
 }

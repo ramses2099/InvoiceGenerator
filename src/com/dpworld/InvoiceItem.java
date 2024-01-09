@@ -4,52 +4,21 @@ import java.util.Date;
 
 public class InvoiceItem {
 
-    private long _gkey;
-
-    private long _extract_gkey;
-
-    private String _event_id;
     private Double _amount;
     private int _quantity;
-    private Date _from_date;
     private String _tariff;
     private String _description;
     private String _long_description;
-    private Date _effective_date;
-
 
     public InvoiceItem() {
     }
 
-    public InvoiceItem(long gkey, long extract_gkey, String event_id, Double amount, int quantity,
-                       Date from_date, String tariff, String description, String long_description,
-                       Date effective_date) {
-        this._gkey = gkey;
-        this._extract_gkey = extract_gkey;
-        this._event_id = event_id;
+    public InvoiceItem(Double amount, int quantity, String tariff, String description, String long_description) {
         this._amount = amount;
         this._quantity = quantity;
-        this._from_date = from_date;
         this._tariff = tariff;
         this._description = description;
         this._long_description = long_description;
-        this._effective_date = effective_date;
-    }
-
-    public long get_gkey() {
-        return _gkey;
-    }
-
-    public void set_gkey(long _gkey) {
-        this._gkey = _gkey;
-    }
-
-    public String get_event_id() {
-        return _event_id;
-    }
-
-    public void set_event_id(String _event_id) {
-        this._event_id = _event_id;
     }
 
     public Double get_amount() {
@@ -92,27 +61,4 @@ public class InvoiceItem {
         this._long_description = _long_description;
     }
 
-    public Date get_from_date() {
-        return _from_date;
-    }
-
-    public void set_from_date(Date _from_date) {
-        this._from_date = _from_date;
-    }
-
-    public long get_extract_gkey() {
-        return _extract_gkey;
-    }
-
-    public void set_extract_gkey(long _extract_gkey) {
-        this._extract_gkey = _extract_gkey;
-    }
-
-    public Date get_effective_date() {
-        return _effective_date;
-    }
-
-    public void set_effective_date(Date _effective_date) {
-        this._effective_date = _effective_date;
-    }
 }

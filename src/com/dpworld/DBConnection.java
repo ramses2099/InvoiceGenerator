@@ -157,8 +157,9 @@ public class DBConnection {
                 String payee = result.getString("payee");
                 String visitId = result.getString("flex_string06");
                 String customer_reference = result.getString("customer_reference");
+                Date finalized_date = result.getDate("finalized_date");
 
-                invoice = new Invoice(gkey, draft_nbr, final_nbr, status, payeeid, payee, visitId, customer_reference);
+                invoice = new Invoice(gkey, draft_nbr, final_nbr, status, payeeid, payee, visitId, customer_reference,finalized_date);
             }
 
             con.close();
@@ -200,39 +201,35 @@ public class DBConnection {
 
             StringBuilder sql = new StringBuilder();
             sql.append("SELECT \n" +
-                    "BII.gkey,\n" +
-                    "BII.extract_gkey,\n" +
-                    "BII.event_id,\n" +
-                    "BII.amount,\n" +
-                    "BII.quantity,\n" +
-                    "BII.from_date,\n" +
-                    "BT.id as tariff, \n" +
-                    "BT.description, BT.long_description,\n" +
-                    "BTR.effective_date\n" +
-                    "FROM bil_invoices BI \n" +
-                    "INNER JOIN bil_invoice_items BII ON BII.invoice_gkey = BI.gkey\n" +
-                    "INNER JOIN bil_tariff_rates BTR ON BTR.gkey = BII.rate_gkey \n" +
-                    "INNER JOIN bil_tariffs BT ON BT.gkey = BTR.tariff_gkey  \n" +
-                    "WHERE BI.status  ='FINAL' and BI.final_nbr =?");
+                    "       BII.amount,\n" +
+                    "       SUM(BII.quantity) AS quantity,\n" +
+                    "       BT.id AS tariff,\n" +
+                    "       BT.description,\n" +
+                    "       BT.long_description\n" +
+                    "FROM   bil_invoices BI\n" +
+                    "       INNER JOIN bil_invoice_items BII\n" +
+                    "               ON BII.invoice_gkey = BI.gkey\n" +
+                    "       INNER JOIN bil_tariff_rates BTR\n" +
+                    "               ON BTR.gkey = BII.rate_gkey\n" +
+                    "       INNER JOIN bil_tariffs BT\n" +
+                    "               ON BT.gkey = BTR.tariff_gkey\n" +
+                    "WHERE  BI.status = 'FINAL'\n" +
+                    "       AND BI.final_nbr = ?\n" +
+                    "GROUP BY  BII.amount,BII.quantity,BT.id,BT.description,BT.long_description");
 
             PreparedStatement statement = con.prepareStatement(sql.toString());
             statement.setString(1, final_number);
             ResultSet result = statement.executeQuery();
             while (result.next()) {
-                Long gkey = result.getLong("gkey");
-                Long extract_gkey = result.getLong("extract_gkey");
-                String event_id = result.getString("event_id");
+
                 Double amount = result.getDouble("amount");
                 int quantity = result.getInt("quantity");
-                Date from_date = result.getDate("from_date");
                 String tariff = result.getString("tariff");
                 String description = result.getString("description");
                 String long_description = result.getString("long_description");
-                Date effective_date = result.getDate("effective_date");
 
                 //
-                list.add(new InvoiceItem(gkey, extract_gkey, event_id, amount, quantity,from_date,
-                        tariff, description, long_description, effective_date));
+                list.add(new InvoiceItem(amount, quantity,tariff, description, long_description));
             }
 
             con.close();

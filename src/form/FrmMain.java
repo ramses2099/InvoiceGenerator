@@ -30,6 +30,8 @@ public class FrmMain extends JFrame {
 
     private String _nbrfinal;
 
+    private String _applied;
+
     private DBConnection dbConnection;
 
     public String getGkeyInvoiceType() {
@@ -38,6 +40,14 @@ public class FrmMain extends JFrame {
 
     public void setGkeyInvoiceType(String gkeyInvoiceType) {
         this.gkeyInvoiceType = gkeyInvoiceType;
+    }
+
+    public String get_applied() {
+        return _applied;
+    }
+
+    public void set_applied(String _applied) {
+        this._applied = _applied;
     }
 
     private String gkeyInvoiceType;
@@ -139,6 +149,7 @@ public class FrmMain extends JFrame {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 set_nbrfinal(tblView.getValueAt(tblView.getSelectedRow(), 1).toString());
+                set_applied(tblView.getValueAt(tblView.getSelectedRow(), 5).toString());
             }
         });
 
@@ -203,5 +214,9 @@ public class FrmMain extends JFrame {
         }
 
     }
+
+    private final static String UNIT ="UNIT";
+    private final static String MARINE = "MARINE";
+
 
 }
