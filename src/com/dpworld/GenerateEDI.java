@@ -98,7 +98,6 @@ public class GenerateEDI {
             //-------DETAILS INVOICE---------------------//
             if (invoiceItems.size() > 0) {
                 for (InvoiceItem item : invoiceItems) {
-                    if (item.get_amount() > 0) {
                         //-------------------------------------------//
                         // --------Segment LIN----------------------//
                         String LIN = String.format("LIN+%s++:EN'\n", countLin);
@@ -135,7 +134,7 @@ public class GenerateEDI {
                         //- bw.write(EQD);
                         //-------------------------------------------//
                         //--------Segment PRI-----------------------//
-                        String PRI = String.format("PRI+AAA:%s'\n", item.get_amount());
+                        String PRI = String.format("PRI+AAA:%s'\n", item.get_total_amount());
                         bw.write(PRI);
                         //-------------------------------------------//
                         //--------Segment RFF+BM-----------------------//
@@ -151,9 +150,9 @@ public class GenerateEDI {
                         bw.write(DTM_7);
                         //-------------------------------------------//
                         //--------Segment LOC_1----------------------//
-                        String vesselClass = "";
-                        String vesselName = "";
-                        String LOC_1 = String.format("LOC+1+DOCAU:139:6+%s:146:11:%s+DOCAUDW:ZZZ:6'\n", vesselClass, vesselName);
+                        String vesselLloyds = invoice.get_vessel_lloyds();
+                        String vesselName = invoice.get_vessel_name();
+                        String LOC_1 = String.format("LOC+1+DOCAU:139:6+%s:146:11:%s+DOCAUDW:ZZZ:6'\n", vesselLloyds, vesselName);
                         bw.write(LOC_1);
                         //-------------------------------------------//
                         //--------Segment TAX----------------------//
@@ -165,10 +164,10 @@ public class GenerateEDI {
                         bw.write(MOA);
 
                         countLin++;
-                        segmentCount += 14;
-                        moaTotal += item.get_amount();
+                        segmentCount += 12;
+                        moaTotal += item.get_total_amount();
 
-                    }
+
                 }
             }
             //---------------------------------------//

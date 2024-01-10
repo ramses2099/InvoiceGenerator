@@ -61,4 +61,7 @@ public class InvoiceItem {
         this._long_description = _long_description;
     }
 
+    public Double get_total_amount(){
+        return (this._amount * this._quantity);
+    }
 }

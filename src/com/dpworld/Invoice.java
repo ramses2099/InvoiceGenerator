@@ -11,14 +11,16 @@ public class Invoice {
     private String _payee;
     private String _vessel_visit_id;
     private String _customer_references;
-
     private Date _finalized_date;
+
+    private String _vessel_lloyds;
+    private String _vessel_name;
 
     public Invoice() {
     }
 
     public Invoice(Long gkey, Long _draft_nbr, String final_nbr, String status, String payeeid, String payee, String vessel_visit_id,
-                   String customer_references,Date finalized_date) {
+                   String customer_references,Date finalized_date, String vessel_lloyds, String vessel_name) {
         this._gkey = gkey;
         this._draft_nbr = _draft_nbr;
         this._final_nbr = final_nbr;
@@ -28,6 +30,8 @@ public class Invoice {
         this._vessel_visit_id = vessel_visit_id;
         this._customer_references = customer_references;
         this._finalized_date = finalized_date;
+        this._vessel_lloyds = vessel_lloyds;
+        this._vessel_name = vessel_name;
     }
 
     public Long get_draft_nbr() {
@@ -100,5 +104,21 @@ public class Invoice {
 
     public void set_finalized_date(Date _finalized_date) {
         this._finalized_date = _finalized_date;
+    }
+
+    public String get_vessel_lloyds() {
+        return _vessel_lloyds;
+    }
+
+    public void set_vessel_lloyds(String _vessel_lloyds) {
+        this._vessel_lloyds = _vessel_lloyds;
+    }
+
+    public String get_vessel_name() {
+        return _vessel_name;
+    }
+
+    public void set_vessel_name(String _vessel_name) {
+        this._vessel_name = _vessel_name;
     }
 }

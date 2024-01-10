@@ -133,17 +133,22 @@ public class DBConnection {
         try {
             StringBuilder sql = new StringBuilder();
             sql.append("SELECT i.gkey,\n" +
-                    "i.draft_nbr,\n" +
-                    "i.final_nbr, \n" +
-                    "i.status,\n" +
-                    "c.id as payeeid,\n" +
-                    "c.name as payee,\n" +
-                    "i.customer_reference,\n" +
-                    "i.flex_string06, \n" +
-                    "i.finalized_date \n" +
-                    "FROM bil_invoices i \n" +
-                    "INNER JOIN bil_customer c ON c.gkey = i.payee_customer_gkey \n" +
-                    "WHERE i.status  ='FINAL' and i.final_nbr = ?");
+                    "       i.draft_nbr,\n" +
+                    "       i.final_nbr,\n" +
+                    "       i.status,\n" +
+                    "       c.id   AS payeeid,\n" +
+                    "       c.NAME AS payee,\n" +
+                    "       i.customer_reference,\n" +
+                    "       i.flex_string06,\n" +
+                    "       i.finalized_date,\n" +
+                    "       cv.id,v.name,\n" +
+                    "       v.lloyds_id\n" +
+                    "FROM   bil_invoices i\n" +
+                    "       INNER JOIN bil_customer c ON c.gkey = i.payee_customer_gkey\n" +
+                    "       LEFT JOIN USRTOSN4P.argo_carrier_visit cv ON (cv.id = i.flex_string06 OR cv.id = i.customer_reference)\n" +
+                    "       LEFT JOIN USRTOSN4P.vsl_vessel_visit_details vvd ON vvd.vvd_gkey = cv.cvcvd_gkey\n" +
+                    "       LEFT JOIN USRTOSN4P.vsl_vessels v on v.gkey = vvd.vessel_gkey\n" +
+                    "WHERE  i.status = 'FINAL' AND i.final_nbr = ?");
 
             PreparedStatement statement = con.prepareStatement(sql.toString());
             statement.setString(1, final_number);
@@ -158,8 +163,11 @@ public class DBConnection {
                 String visitId = result.getString("flex_string06");
                 String customer_reference = result.getString("customer_reference");
                 Date finalized_date = result.getDate("finalized_date");
-
-                invoice = new Invoice(gkey, draft_nbr, final_nbr, status, payeeid, payee, visitId, customer_reference,finalized_date);
+                String vessel_lloyds = result.getString("lloyds_id");
+                String vessel_name = result.getString("name");
+                //
+                invoice = new Invoice(gkey, draft_nbr, final_nbr, status, payeeid, payee, visitId, customer_reference,
+                        finalized_date,vessel_lloyds,vessel_name);
             }
 
             con.close();
@@ -214,7 +222,7 @@ public class DBConnection {
                     "       INNER JOIN bil_tariffs BT\n" +
                     "               ON BT.gkey = BTR.tariff_gkey\n" +
                     "WHERE  BI.status = 'FINAL'\n" +
-                    "       AND BI.final_nbr = ?\n" +
+                    "AND BII.amount > 0 AND BI.final_nbr = ?\n" +
                     "GROUP BY  BII.amount,BII.quantity,BT.id,BT.description,BT.long_description");
 
             PreparedStatement statement = con.prepareStatement(sql.toString());
