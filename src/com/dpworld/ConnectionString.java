@@ -58,6 +58,8 @@ public class ConnectionString {
             key ="N4";
         }else if(connectionType == DBConnectionType.BILLING){
             key ="BILLING";
+        }else if(connectionType == DBConnectionType.N4INVOICEGENERATOR){
+            key ="N4INVOICEGENERATOR";
         }
         if (this._dict != null) {
             credential = this._dict.get(key);

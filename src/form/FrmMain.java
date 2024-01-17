@@ -99,6 +99,7 @@ public class FrmMain extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String nbrfinal = get_nbrfinal();
+                Invoice invoice = null;
                 if (nbrfinal == null) {
                     JOptionPane.showMessageDialog(null, "For genearte EDI is required selected an invoice",
                             "Invoive Generator", JOptionPane.ERROR_MESSAGE);
@@ -108,13 +109,15 @@ public class FrmMain extends JFrame {
                     GenerateEDI generateEDI = new GenerateEDI();
                     GeneratePDF generatePDF = new GeneratePDF();
                     GenerateZip generateZip = new GenerateZip();
+                    GenerateProcessInvoices generateProcessInvoices = new GenerateProcessInvoices();
+                    GenerateProcessInvoicesLog generateProcessInvoicesLog = new GenerateProcessInvoicesLog();
 
 
                     try{
                         //---------------------------------------------------------------------//
                         //---------------------GET DATA---------------------------------------//
                         dbConnection = new DBConnection(DBConnectionType.BILLING);
-                        Invoice invoice = dbConnection.getInvoiceByFinalNumber(nbrfinal);
+                        invoice = dbConnection.getInvoiceByFinalNumber(nbrfinal);
                         if (invoice == null) {
                             throw new Exception("Invoice is null");
                         }
@@ -133,12 +136,29 @@ public class FrmMain extends JFrame {
                         //-----------------------------------------//
                         //-------Step 3---------------------------//
                         generateZip.generateZip(fileName);
+                        //-----------------------------------------//
+                        //-------Step 4---------------------------//
+                        String invoiceNbrMsc = String.format("6422%s", invoice.get_final_nbr());
+                        ProcessInvoices processInvoices = new ProcessInvoices(invoice.get_draft_nbr(),invoice.get_final_nbr(),
+                                invoiceNbrMsc,fileName);
+                        generateProcessInvoices.generatedProcessInvoices(processInvoices);
+                        //-----------------------------------------//
+                        //-------Step 5---------------------------//
+                        ProcessInvoicesLog processInvoicesLog = new ProcessInvoicesLog(invoice.get_draft_nbr(),invoice.get_final_nbr(),
+                                invoiceNbrMsc,3,"Invoice process correctly");
+                        generateProcessInvoicesLog.generatedProcessInvoicesLog(processInvoicesLog);
 
                         //---------------------------------------//
                         JOptionPane.showMessageDialog(null, "Invoice generated correctly",
                                 "Invoive Generator", JOptionPane.INFORMATION_MESSAGE);
                     }catch (Exception ex){
                         System.out.println("Method btnGenerateEDI " + ex.getMessage());
+                        //-----------------------------------------//
+                        //-------log------------------------------//
+                        String invoiceNbrMsc = String.format("6422%s", invoice.get_final_nbr());
+                        ProcessInvoicesLog processInvoicesLog = new ProcessInvoicesLog(invoice.get_draft_nbr(),invoice.get_final_nbr(),
+                                invoiceNbrMsc,2,ex.getMessage());
+                        generateProcessInvoicesLog.generatedProcessInvoicesLog(processInvoicesLog);
                     }
                 }
             }

@@ -50,7 +50,7 @@ public class GenerateEDI {
             segmentCount += 1;
             //-------------------------------------------//
             // --------Segment BGM----------------------//
-            String BGM = String.format("BGM+380+6422%S+9'\n", invoice.get_final_nbr());
+            String BGM = String.format("BGM+380+6422%s+9'\n", invoice.get_final_nbr());
             bw.write(BGM);
             segmentCount += 1;
             //-------------------------------------------//
@@ -134,7 +134,7 @@ public class GenerateEDI {
                         //- bw.write(EQD);
                         //-------------------------------------------//
                         //--------Segment PRI-----------------------//
-                        String PRI = String.format("PRI+AAA:%s'\n", item.get_total_amount());
+                        String PRI = String.format("PRI+AAA:%.2f'\n", item.get_amount());
                         bw.write(PRI);
                         //-------------------------------------------//
                         //--------Segment RFF+BM-----------------------//

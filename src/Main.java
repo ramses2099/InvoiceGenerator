@@ -1,15 +1,16 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import form.*;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
-import java.awt.*;
-import java.io.InputStream;
-import java.net.URL;
 
 public class Main {
 
-    public static void main(String[] args) {
+    private static final Logger LOGGER = LogManager.getLogger(Main.class);
 
+    public static void main(String[] args) {
+        LOGGER.info("Start app");
         FrmMain frmMain = new FrmMain();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
